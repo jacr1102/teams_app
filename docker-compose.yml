@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  rails:
+    build: .
+    volumes:
+      - ./:/www
+      - packs:/www/public/packs
+      - assets:/www/public/assets
+    environment:
+      - RAILS_ENV=development
+      - mysql_host=mysql
+    command: /usr/share/rvm/wrappers/ruby-2.7.4/bundle exec rails server -b 0.0.0.0 -p 80 --pid=/tmp/server.pid
+    ports:
+      - 80:80
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: arkus_db
+      MYSQL_ROOT_PASSWORD: "j2DXC%&aYxLU"
+    ports:
+      - 8806:3306
+    volumes:
+      - arkus-mysql:/var/lib/mysql
+
+volumes:
+  arkus-mysql:
+  packs:
+  assets:
