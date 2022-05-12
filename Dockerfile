@@ -12,6 +12,11 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install -y libjpeg-turbo8 libjpeg8-dev libpng12-dev libxrender-dev libfontconfig1-dev
 
+# apt install node 10
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+    apt-get update && \
+    apt-get install -y nodejs
+
 # apt install yarn
 ENV yarn_version=1.17.3
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -32,6 +37,7 @@ RUN bash -l -c "rvm install ruby-${ruby_version} --create && \
     rvm rvmrc warning ignore all.rvmrcs && \
     rvm rvmrc trust /www"
 
+##RUN bundle update --bundler
 #bundle install gems
  COPY Gemfile Gemfile.lock ./
 ENV bundler_version=1.17.3
