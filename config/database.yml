@@ -17,10 +17,10 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  host: <%= ENV.fetch('mysql_host', 'localhost') %>
+  host: <%= ENV.fetch('mysql_test_host', 'localhost') %>
   username: root
   password: j2DXC%&aYxLU
-  database: arkus_db
+  database: arkus_db_test
 
 production:
   <<: *default

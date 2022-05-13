@@ -23,7 +23,7 @@ ActiveRecord::Base.transaction do
         password:   "123123",
         role:       Role.find_by_name(role),
         profile_attributes: {
-          english_level: [:no_experience, :a2, :b1, :b2, :c1, :c2].sample,
+          english_level: Profile.english_levels.keys.sample,
           technical_experience: Faker::Lorem.paragraphs(number: 2),
           cv_link: Faker::Internet.url
         }

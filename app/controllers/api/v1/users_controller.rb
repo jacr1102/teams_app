@@ -48,11 +48,11 @@ class Api::V1::UsersController < ActionController::API
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.includes(:profile).find(params[:id])
+      @user = User.includes(:profile, :role).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit :first_name, :username, :last_name, :encrypted_password, :email, profile_attributes: [ :id, :user_id, :english_level, :technical_experience ]
+      params.require(:user).permit :first_name, :username, :last_name, :encrypted_password, :email, profile_attributes: [ :id, :user_id, :english_level, :technical_experience, :cv_link ]
     end
 end

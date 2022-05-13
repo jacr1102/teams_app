@@ -16,11 +16,13 @@ services:
       - NODE_ENV=${NODE_ENV:-development}
       - RAILS_ENV=${RAILS_ENV:-development}
       - mysql_host=arkus_mysql
+      - mysql_test_host=arkus_test_mysql
     command: /usr/share/rvm/wrappers/ruby-2.7.4/bundle exec rails server -b 0.0.0.0 -p 80 --pid=/tmp/server.pid
     ports:
       - 80:80
     depends_on:
       - arkus_mysql
+      - arkus_test_mysql
 
   arkus_mysql:
     image: mysql:5.7
@@ -32,8 +34,19 @@ services:
     volumes:
       - arkus-mysql:/var/lib/mysql
 
+  arkus_test_mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: arkus_db_test
+      MYSQL_ROOT_PASSWORD: "j2DXC%&aYxLU"
+    ports:
+      - 8808:3306
+    volumes:
+      - arkus-test-mysql:/var/lib/mysql
+
 volumes:
   arkus-mysql:
+  arkus-test-mysql:
   arkus-bash:
   arkus_node_modules:
   arkus_packs:
