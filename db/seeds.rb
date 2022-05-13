@@ -15,19 +15,21 @@ ActiveRecord::Base.transaction do
   User.create first_name: "Super", email: "super@test.com", username: "Super", password: "ZRS@Ax!$CSxJ", role: Role.find_by_name(:super)
 
   def generate_user(role)
-    user = User.create(
-      first_name: Faker::Name.unique.first_name,
-      last_name:  Faker::Name.unique.last_name,
-      email:      Faker::Internet.unique.email,
-      username:   Faker::Internet.unique.username,
-      password:   "123123",
-      role:       Role.find_by_name(role) )
-
-      user.create_profile(
-        english_level: [:no_experience, :a2, :b1, :b2, :c1, :c2].sample,
-        technical_experience: Faker::Lorem.paragraphs(number: 2),
-        cv_link: Faker::Internet.url).user
-  end
+    User.create( {
+        first_name: Faker::Name.unique.first_name,
+        last_name:  Faker::Name.unique.last_name,
+        email:      Faker::Internet.unique.email,
+        username:   Faker::Internet.unique.username,
+        password:   "123123",
+        role:       Role.find_by_name(role),
+        profile_attributes: {
+          english_level: [:no_experience, :a2, :b1, :b2, :c1, :c2].sample,
+          technical_experience: Faker::Lorem.paragraphs(number: 2),
+          cv_link: Faker::Internet.url
+        }
+      }
+    )
+end
 
   3.times do
     generate_user(:admin)
@@ -41,7 +43,7 @@ ActiveRecord::Base.transaction do
       user: generate_user(:user) )
 
     5.times do
-      account.teams <<  generate_user(:user)
+      account.team <<  generate_user(:user)
     end
   end
 

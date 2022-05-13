@@ -12,13 +12,14 @@ class User < ApplicationRecord
   belongs_to :role
 
   has_one :profile, dependent: :destroy
-  accepts_nested_attributes_for :profile
+
 
   has_many :accounts
   has_many :logs, dependent: :destroy
   has_many :team_members
   has_many :projects, source: :accounts, through: :team_members
 
+  accepts_nested_attributes_for :profile
   after_initialize :set_default_role
 
 
