@@ -10,48 +10,50 @@ require 'faker'
 
 
 
+ActiveRecord::Base.transaction do
+  Role.create [{name: :super}, {name: :admin}, {name: :user}]
+  User.create first_name: "Super", email: "super@test.com", username: "Super", password: "ZRS@Ax!$CSxJ", role: Role.find_by_name(:super)
 
-Role.create [{name: :super}, {name: :admin}, {name: :user}]
-User.create first_name: "Super", email: "super@test.com", username: "Super", password: "ZRS@Ax!$CSxJ", role: Role.where(name: :super).first
+  def generate_user(role)
+    user = User.create(
+      first_name: Faker::Name.unique.first_name,
+      last_name:  Faker::Name.unique.last_name,
+      email:      Faker::Internet.unique.email,
+      username:   Faker::Internet.unique.username,
+      password:   "123123",
+      role:       Role.find_by_name(role) )
 
-def generate_user(role)
-  user_role = Role.where(name: role).first
-
-  user = User.create
-    first_name: Faker::Name.first_name,
-    last_name:  Faker::Name.last_name,
-    email:      Faker::Internet.email,
-    username:   Faker::Internet.username,
-    password:   "123123"
-    role:       user_role
-
-    user.profile.create
-      english_level: [:none, :a2, :b1, :b2, :c1, :c2].sample,
-      technical_experience: Faker::Lorem.paragraphs(number: 2),
-      cv_link: Faker::Internet.url
-end
-
-3.times do
-  generate_user(:admin)
-end
-
-10.times do
-
-  account = Account.create
-    name: Faker:Company.name,
-    client_name: Faker:Company.name,
-    user: generate_user(:user)
-
-  5.times do
-    account.teams <<  generate_user(:user)
+      user.create_profile(
+        english_level: [:no_experience, :a2, :b1, :b2, :c1, :c2].sample,
+        technical_experience: Faker::Lorem.paragraphs(number: 2),
+        cv_link: Faker::Internet.url).user
   end
+
+  3.times do
+    generate_user(:admin)
+  end
+
+  10.times do
+    company_name = Faker::Company.unique.name
+    account = Account.create(
+      name: company_name.underscore,
+      client_name: company_name,
+      user: generate_user(:user) )
+
+    5.times do
+      account.teams <<  generate_user(:user)
+    end
+  end
+
+  10.times do
+    generate_user(:user)
+  end
+
 end
 
-10.times do
-  User.create
-    first_name: Faker::Name.first_name,
-    last_name:  Faker::Name.last_name,
-    email:      Faker::Internet.email,
-    password:   "123123"
-    role:       generate_user(:user)
-end
+
+##Role.create [{name: :super}, {name: :admin}, {name: :user}]
+##user = User.create( first_name: Faker::Name.unique.first_name, last_name:  Faker::Name.unique.last_name, email:      Faker::Internet.unique.email, username:   Faker::Internet.unique.username, password:   "123123" )
+##
+##company_name = Faker::Company.unique.name
+##account = Account.create( name: company_name.underscore, client_name: company_name, user: user )
