@@ -237,6 +237,7 @@ DEPENDENCIES
   redis (~> 4.0)
   rspec-rails (~> 4.1.0)
   sentient_user
+  simplecov
   spring
 
 BUNDLED WITH

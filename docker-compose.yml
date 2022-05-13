@@ -7,6 +7,7 @@ services:
     image: arkus
     volumes:
       - ./:/www
+      - ./coverage:/www/public/rspec/coverage
       - arkus_node_modules:/www/node_modules
       - arkus_packs:/www/public/packs
       - arkus_assets:/www/public/assets
