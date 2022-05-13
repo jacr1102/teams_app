@@ -1,10 +1,10 @@
-class Api::V1::UsersController < ApplicationController
+class Api::V1::UsersController < ActionController::API
   before_action :set_user, only: %i[ show update destroy ]
 
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.includes(:profile).all
   end
 
   # GET /users/1
@@ -18,7 +18,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render :show, status: :created, location: @user
+      render :show, status: :created, location: api_v1_user_url(@user)
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -28,26 +28,31 @@ class Api::V1::UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     if @user.update(user_params)
-      render :show, status: :ok, location: @user
+      #flash.now[:notice] = "User was updated successfully"
+      render :show, status: :ok, location: api_v1_user_url(@user)
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { notice: "Error updating the user", errors: @user.errors, status: :error}, status: :unprocessable_entity
     end
   end
 
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    @user.destroy
+    if @user.destroy
+      render json: {notice: "User was deleted successfully"}, status: :ok
+    else
+      render json: {notice: "Error deleting the user", errors: @user.errors, status: :error}, status: :unprocessable_entity
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = Profile.find(params[:id])
+      @user = User.includes(:profile).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.fetch(:user, {})
+      params.require(:user).permit :first_name, :username, :last_name, :encrypted_password, :email, profile_attributes: [ :english_level, :technical_experience ]
     end
 end
