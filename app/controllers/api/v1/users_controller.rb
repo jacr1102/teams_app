@@ -53,6 +53,6 @@ class Api::V1::UsersController < ActionController::API
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit :first_name, :username, :last_name, :encrypted_password, :email, profile_attributes: [ :english_level, :technical_experience ]
+      params.require(:user).permit :first_name, :username, :last_name, :encrypted_password, :email, profile_attributes: [ :id, :user_id, :english_level, :technical_experience ]
     end
 end
