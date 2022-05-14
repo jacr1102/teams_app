@@ -24,6 +24,7 @@ gem 'nokogiri'
 gem 'paper_trail' # Versioning
 
 group :development, :test do
+  gem 'byebug'
   gem 'rspec-rails', '~> 4.1.0'
 #  gem 'capybara'
   gem 'factory_bot_rails'
