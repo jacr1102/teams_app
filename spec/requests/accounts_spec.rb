@@ -43,7 +43,7 @@ RSpec.describe "/accounts", type: :request do
   describe "GET /show" do
     it "renders a successful response" do
       account = Account.create! valid_attributes
-      get account_url(account), as: :json
+      get api_v1_account_url(account), as: :json
       expect(response).to be_successful
     end
   end
@@ -90,7 +90,7 @@ RSpec.describe "/accounts", type: :request do
 
       it "updates the requested account" do
         account = Account.create! valid_attributes
-        patch account_url(account),
+        patch api_v1_account_url(account),
               params: { account: new_attributes }, headers: valid_headers, as: :json
         account.reload
         skip("Add assertions for updated state")
@@ -98,7 +98,7 @@ RSpec.describe "/accounts", type: :request do
 
       it "renders a JSON response with the account" do
         account = Account.create! valid_attributes
-        patch account_url(account),
+        patch api_v1_account_url(account),
               params: { account: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
@@ -108,7 +108,7 @@ RSpec.describe "/accounts", type: :request do
     context "with invalid parameters" do
       it "renders a JSON response with errors for the account" do
         account = Account.create! valid_attributes
-        patch account_url(account),
+        patch api_v1_account_url(account),
               params: { account: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq("application/json")
@@ -120,7 +120,7 @@ RSpec.describe "/accounts", type: :request do
     it "destroys the requested account" do
       account = Account.create! valid_attributes
       expect {
-        delete account_url(account), headers: valid_headers, as: :json
+        delete api_v1_account_url(account), headers: valid_headers, as: :json
       }.to change(Account, :count).by(-1)
     end
   end
