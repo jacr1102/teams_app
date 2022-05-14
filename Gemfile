@@ -23,9 +23,13 @@ gem 'mysql2'
 gem 'nokogiri'
 gem 'paper_trail' # Versioning
 
+gem 'rswag-api'
+gem 'rswag-ui'
+
 group :development, :test do
   gem 'byebug'
   gem 'rspec-rails', '~> 4.1.0'
+  gem 'rswag-specs'
 #  gem 'capybara'
   gem 'factory_bot_rails'
   gem 'faker', require: false
