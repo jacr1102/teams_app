@@ -1,13 +1,16 @@
 class Api::V1::AccountsController < ApplicationController
   #include ActionController::HttpAuthentication::Token
-
   before_action :set_account, only: %i[ show update destroy ]
 
   # GET /accounts
   # GET /accounts.json
-  def index
+  def self.policy_class
+    AccountPolicy
+  end
 
-    @accounts = Account.all unless current_user.is_admin?
+  def index
+    authorize :account, :index?
+    @accounts = Account.all
   end
 
   # GET /accounts/1
@@ -48,6 +51,7 @@ class Api::V1::AccountsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_account
       @account = Account.find(params[:id])
+      authorize @account
     end
 
     # Only allow a list of trusted parameters through.
