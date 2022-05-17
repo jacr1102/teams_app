@@ -6,7 +6,15 @@
 // All it does is render <div>Hello Vue</div> at the bottom of the page.
 
 import Vue from 'vue'
+import Vuex from 'vuex'
+import Bootstrap from 'bootstrap'
+import ElementUI from 'element-ui'
 import App from '../app.vue'
+
+window.axios = require('axios');
+
+// Creamos una propiedad global para axios
+Vue.prototype.$axios = axios
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({

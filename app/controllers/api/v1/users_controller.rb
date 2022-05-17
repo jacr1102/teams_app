@@ -4,7 +4,7 @@ class Api::V1::UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    authorize :user, :index?
+    #authorize :user, :index?
     @users = User.includes(:profile).all
   end
 

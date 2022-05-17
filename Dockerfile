@@ -12,8 +12,8 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install -y libjpeg-turbo8 libjpeg8-dev libpng12-dev libxrender-dev libfontconfig1-dev
 
-# apt install node 10
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+# apt install node 12
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get update && \
     apt-get install -y nodejs
 
