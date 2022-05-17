@@ -8,5 +8,4 @@ class Account < ApplicationRecord
   has_many :team_members
   has_many :team, source: :user, through: :team_members
 
-  accepts_nested_attributes_for :team
 end

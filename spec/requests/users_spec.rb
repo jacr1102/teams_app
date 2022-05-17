@@ -12,7 +12,7 @@ RSpec.describe "Users", type: :request do
   describe "POST /api/v1/users" do
     let(:params){
       {user: {
-        first_name: Faker::Name.unique.first_name, last_name:  Faker::Name.unique.last_name, email:      Faker::Internet.unique.email, username:   Faker::Internet.unique.username, encrypted_password:   "123123",
+        first_name: Faker::Name.unique.first_name, last_name:  Faker::Name.unique.last_name, email:      Faker::Internet.unique.email, username:   Faker::Internet.unique.username, password:   "123123",
         profile_attributes: {
           english_level: Profile.english_levels.keys.sample, technical_experience: Faker::Lorem.paragraphs(number: 2), cv_link: Faker::Internet.url
         }

@@ -1,18 +1,21 @@
 source 'https://rubygems.org'
 
 gem 'rails', '6.1.4'
-#gem 'bootstrap-sass', '3.3.7'
-#gem 'jquery-rails' # jQuery
-#gem 'jquery-ui-rails' # jQuery UI
+gem 'bootstrap-sass', '3.3.7'
+gem 'jquery-rails' # jQuery
+gem 'jquery-ui-rails' # jQuery UI
 
 gem 'puma', '~> 4'
-#gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5.0'
 #gem 'webpacker', '~> 5.0'
-#gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '>= 1.3.0'
+#gem 'vueonrails'
+
 #gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'redis', '~> 4.0'
 gem 'jwt'
+gem 'devise-jwt'
 gem 'pundit' # Access policies
 gem 'sentient_user'
 gem 'devise'

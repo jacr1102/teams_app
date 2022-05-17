@@ -4,7 +4,7 @@ FactoryBot.define do
     sequence(:last_name)  { |n| "LastName #{n}" }
     username              { |n| "Name#{n}LastName#{n}" }
     sequence(:email)      { |n| "test#{n}@email.com" }
-    encrypted_password              { "123456" }
+    password              { "123456" }
 
     trait :admin do
       admin_role
