@@ -7,9 +7,9 @@ gem 'jquery-ui-rails' # jQuery UI
 
 gem 'puma', '~> 4'
 gem 'sass-rails', '~> 5.0'
-#gem 'webpacker', '~> 5.0'
+gem 'webpacker', '~> 5.4', '>= 5.4.3'
 gem 'uglifier', '>= 1.3.0'
-#gem 'vueonrails'
+gem 'vueonrails'
 
 #gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'

@@ -8,9 +8,9 @@ services:
     volumes:
       - ./:/www
       - ./coverage:/www/public/rspec/coverage
-      - arkus_node_modules:/www/node_modules
       - arkus_packs:/www/public/packs
       - arkus_assets:/www/public/assets
+      - arkus_node_modules:/www/node_modules
       - arkus-bash:/root/usr
     environment:
       - NODE_ENV=${NODE_ENV:-development}
@@ -23,6 +23,17 @@ services:
     depends_on:
       - arkus_mysql
       - arkus_test_mysql
+
+##  vuejs:
+##    build: ./vuejs
+##    volumes:
+##      - ./:/www/vuejs
+##      - arkus_node_modules:/www/node_modules
+##    environment:
+##      - NODE_ENV=${NODE_ENV:-development}
+##      - rails_host=arkus_host
+##    ports:
+##      - 80:80
 
   arkus_mysql:
     image: mysql:5.7
