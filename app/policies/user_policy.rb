@@ -18,9 +18,8 @@ class UserPolicy
     !current_user.is_user?
   end
 
-
   def create?
-    !current_user.is_user?
+    current_user.is_super?
   end
 
   def new?
