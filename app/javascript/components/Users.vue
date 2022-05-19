@@ -36,7 +36,7 @@
     },
     mounted () {
       axios
-        .get('http://localhost/api/v1/users')
+        .get('http://localhost/api/v1/users',{ "Authorization": this.$store.token })
         .then( (response) => { this.data = response.data.users } )
 
     }

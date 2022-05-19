@@ -4,7 +4,7 @@ class Api::V1::UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    #authorize :user, :index?
+    authorize :user, :index?
     @users = User.includes(:profile,:role).all
   end
 
@@ -50,7 +50,7 @@ class Api::V1::UsersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.includes(:profile, :role).find(params[:id])
-      #authorize @user
+      authorize @user
     end
 
     # Only allow a list of trusted parameters through.

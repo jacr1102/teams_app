@@ -78,25 +78,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const store = new Vuex.Store({
     state:{
-      title: ''
-      user: null,
-      token: null
+      title: '',
+      user: {
+        email: null,
+        password: null
+      },
+      token: null,
+      logged_in: false,
+      logged_user: null
     },
     methods: {
       getToken(){
-        axios.post("/logins", {user: this.user} )
-          .then( (response) => {
-            if(response.status === 201) {
-               /* Store Token*/
-               /* Redirect when logout */
-            }
-          } );
+        this.token
       }
     },
     mutations: {
-      setTitle(state,title){
+      setTitle(state, title){
         state.title = title
+      },
+      setToken(state, token){
+        state.token = token
       }
+    },
+    created(){
+
     }
 
   })
@@ -110,4 +115,50 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(app.$el)
 
   // console.log(app)
+})
+
+
+
+
+
+
+
+
+export default new Vuex.Store({
+  state: {
+    accessToken: null,
+    loggingIn: false,
+    loginError: null
+  },
+  mutations: {
+    loginStart: state => state.loggingIn = true,
+    loginStop: (state, errorMessage) => {
+      state.loggingIn = false;
+      state.loginError = errorMessage;
+    },
+    updateAccessToken: (state, accessToken) => {
+      state.accessToken = accessToken;
+    }
+  },
+  actions: {
+    doLogin({ commit }, loginData) {
+      commit('loginStart');
+
+      axios.post('https://reqres.in/api/login', {
+        ...loginData
+      })
+      .then(response => {
+        localStorage.setItem('accessToken', response.data.token);
+        commit('loginStop', null);
+        commit('updateAccessToken', response.data.token);
+      })
+      .catch(error => {
+        commit('loginStop', error.response.data.error);
+        commit('updateAccessToken', null);
+      })
+    },
+    fetchAccessToken({ commit }) {
+      commit('updateAccessToken', localStorage.getItem('accessToken'));
+    }
+  }
 })

@@ -3,10 +3,29 @@
     <div class="row">
       <div class="col-md-12">
         <div id="app">
-          <div id="nav">
-            <router-link to="/">Home</router-link>
-            <router-link to="/users">Users</router-link>
-          </div>
+          <nav v-if="this.$store.state.logged_in" id="nav" class="navbar navbar-dark bg-primary navbar-expand-lg">
+            <div class="container-fluid">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <router-link class="nav-link" to="/">Home</router-link>
+                  </li>
+                  <li class="nav-item">
+                    <router-link class="nav-link" to="/users">Users</router-link>
+                  </li>
+                  <!--<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dropdown
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="#">Action</a></li>
+                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                  </li> -->
+                </ul>
+            </div>
+          </nav>
           <h1>{{title}}</h1>
           <router-view/>
         </div>
@@ -27,11 +46,16 @@
       }
     },
     mounted(){
-      this.$store.commit('setTitle', 'Dashboard');
+      /*this.$store.commit('setTitle', 'Dashboard');*/
     },
     data: function () {
       return {
 
+      }
+    },
+    beforeCreate () {
+      if ( !this.$store.state.logged_in) {
+        this.$router.push({ path: '/login' })
       }
     }
   }
