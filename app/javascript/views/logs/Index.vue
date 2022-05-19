@@ -35,6 +35,7 @@
       }
     },
     mounted () {
+      this.$store.commit('setTitle', 'List of Users')
       axios
         .get('http://localhost/api/v1/users')
         .then( (response) => { this.data = response.data.users } )
@@ -42,4 +43,3 @@
     }
   }
 </script>
-this.data = response["users"];

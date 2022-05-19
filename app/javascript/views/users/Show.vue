@@ -1,0 +1,53 @@
+<template>
+  <div class="">
+    <div class="border container px-4 py-4">
+        <div class="col-md-6 mx-auto">
+          <div class="row">
+            <label class="col-md-4 fw-bold">Name:</label>
+            <p class="col-md-8">{{data.name}}</p>
+          </div>
+          <div class="row">
+              <label class="col-md-4 fw-bold">Email:</label>
+              <p class="col-md-8">{{data.email}}</p>
+          </div>
+          <div class="row">
+              <label class="col-md-4 fw-bold">Role:</label>
+              <p class="col-md-8">{{data.role}}</p>
+          </div>
+          <div class="row">
+            <label class="col-md-4 fw-bold">English level:</label>
+            <p class="col-md-8">{{data.english_level}}</p>
+          </div>
+          <div class="row">
+            <label class="col-md-4 fw-bold">CV Link:</label>
+            <p class="col-md-8">{{data.cv_link}}</p>
+          </div>
+          <div class="row">
+            <label class="col-md-4 fw-bold">Technical Experience:</label>
+            <p class="col-md-8">{{data.technical_experience}}</p>
+          </div>
+        </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'ShowUser',
+    data: function(){
+      return {
+        fields: ['id','name','client_name'],
+        data: [],
+      }
+    },
+    mounted () {
+      this.$store.commit('setTitle', 'User')
+      axios
+        .get('/api/v1/users/'+this.$route.params.id)
+        .then( (response) => { this.data = response.data.user } )
+
+
+
+    }
+  }
+</script>

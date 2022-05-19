@@ -3,8 +3,12 @@
     <div class="row">
       <div class="col-md-12">
         <div id="app">
-          <p>{{ message }}</p>
-          <Users/>
+          <div id="nav">
+            <router-link to="/">Home</router-link>
+            <router-link to="/users">Users</router-link>
+          </div>
+          <h1>{{title}}</h1>
+          <router-view/>
         </div>
       </div>
     </div>
@@ -13,23 +17,22 @@
 
 <script>
 
-  import Users from './components/Users'
-
   export default {
     components: {
-        Users,
+
+    },
+    computed: {
+      title(){
+        return this.$store.state.title
+      }
+    },
+    mounted(){
+      this.$store.commit('setTitle', 'Dashboard');
     },
     data: function () {
       return {
-        message: "Lista de Usuarios"
+
       }
     }
   }
 </script>
-
-<style scoped>
-p {
-  font-size: 2em;
-  text-align: center;
-}
-</style>

@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'rails', '6.1.4'
-gem 'bootstrap-sass', '3.3.7'
+# gem 'bootstrap-sass', '3.3.7'
+gem 'bootstrap', '~> 5.1', '>= 5.1.3'
 gem 'jquery-rails' # jQuery
 gem 'jquery-ui-rails' # jQuery UI
 

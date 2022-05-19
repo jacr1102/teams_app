@@ -6,17 +6,17 @@
           <tr>
             <th scope="col">id</th>
             <th scope="col">Name</th>
-            <th scope="col">email</th>
-            <th scope="col">English Level</th>
+            <th scope="col">Client Name</th>
+            <th scope="col"></th>
             <th scope="col">Options</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in data" v-bind:key="user.id" >
-            <th scope="col">{{user.id}}</th>
-            <th scope="col">{{user.name}}</th>
-            <th scope="col">{{user.email}}</th>
-            <th scope="col">{{user.english_level}}</th>
+          <tr v-for="account in data" v-bind:key="account.id" >
+            <th scope="col">{{account.id}}</th>
+            <th scope="col">{{account.name}}</th>
+            <th scope="col">{{account.client_name}}</th>
+            <th scope="col"></th>
             <th scope="col"><a href="">View</a></th>
           </tr>
         </tbody>
@@ -27,19 +27,19 @@
 
 <script>
   export default {
-    name: 'Users',
+    name: 'Accounts',
     data: function(){
       return {
-        fields: ['id','name','email'],
+        fields: ['id','name','client_name'],
         data: [],
       }
     },
     mounted () {
+      this.$store.commit('setTitle', 'List of Accounts')
       axios
-        .get('http://localhost/api/v1/users')
-        .then( (response) => { this.data = response.data.users } )
+        .get('http://localhost/api/v1/accounts')
+        .then( (response) => { this.data = response.data.accounts } )
 
     }
   }
 </script>
-this.data = response["users"];
