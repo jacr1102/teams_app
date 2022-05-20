@@ -4,12 +4,9 @@ class Api::V1::AccountsController < ApplicationController
 
   # GET /accounts
   # GET /accounts.json
-  def self.policy_class
-    AccountPolicy
-  end
 
   def index
-    authorize :account, :index?
+    #authorize :account, :index?
     @accounts = Account.all
   end
 
@@ -43,7 +40,11 @@ class Api::V1::AccountsController < ApplicationController
   # DELETE /accounts/1
   # DELETE /accounts/1.json
   def destroy
-    @account.destroy
+    if @account.destroy
+      render json: {notice: "Account was deleted successfully"}, status: :ok
+    else
+      render json: {notice: "Error deleting the account", errors: @account.errors, status: :error}, status: :unprocessable_entity
+    end
   end
 
   private
@@ -51,7 +52,7 @@ class Api::V1::AccountsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_account
       @account = Account.find(params[:id])
-      authorize @account
+      #authorize @account
     end
 
     # Only allow a list of trusted parameters through.

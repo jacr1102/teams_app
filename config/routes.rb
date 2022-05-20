@@ -7,8 +7,11 @@ Rails.application.routes.draw do
       resources :logs
       resources :teams
       resources :accounts
-      resources :users
+      resources :users do
+        get 'users_select', on: :collection
+      end
 
+      get 'roles/roles_select'
     end
   end
 

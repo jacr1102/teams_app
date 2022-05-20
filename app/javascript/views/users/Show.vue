@@ -16,15 +16,15 @@
           </div>
           <div class="row">
             <label class="col-md-4 fw-bold">English level:</label>
-            <p class="col-md-8">{{data.english_level}}</p>
+            <p class="col-md-8" v-if="data.profile_attributes">{{data.profile_attributes.english_level}}</p>
           </div>
           <div class="row">
             <label class="col-md-4 fw-bold">CV Link:</label>
-            <p class="col-md-8">{{data.cv_link}}</p>
+            <p class="col-md-8" v-if="data.profile_attributes">{{data.profile_attributes.cv_link}}</p>
           </div>
           <div class="row">
             <label class="col-md-4 fw-bold">Technical Experience:</label>
-            <p class="col-md-8">{{data.technical_experience}}</p>
+            <p class="col-md-8" v-if="data.profile_attributes">{{data.profile_attributes.technical_experience}}</p>
           </div>
         </div>
     </div>
@@ -36,7 +36,6 @@
     name: 'ShowUser',
     data: function(){
       return {
-        fields: ['id','name','client_name'],
         data: [],
       }
     },

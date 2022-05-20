@@ -27,7 +27,18 @@ end
 
 ActiveRecord::Base.transaction do
   Role.create [{name: :super}, {name: :admin}, {name: :user}]
-  User.create first_name: "Super", email: "super@test.com", username: "Super", password: "ZRS@Ax!$CSxJ", role: Role.find_by_name(:super)
+  User.create(
+    first_name: "Super",
+    email: "super@test.com",
+    username: "Super",
+    password: "ZRS@Ax!$CSxJ",
+    role: Role.find_by_name(:super),
+    profile_attributes: {
+        english_level: :c1,
+        technical_experience: '',
+        cv_link: ''
+      }
+    )
 
   3.times do
     generate_user(:admin)

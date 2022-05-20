@@ -18,8 +18,10 @@ class User < ApplicationRecord
 
   has_many :accounts
   has_many :logs, dependent: :destroy
-  has_many :team_members
+  has_many :team_members, dependent: :destroy
   has_many :projects, source: :accounts, through: :team_members
+
+  scope :no_super, -> { joins(:role).where.not( role: { name: 'super' } ) }
 
   accepts_nested_attributes_for :profile
   after_initialize :set_default_role

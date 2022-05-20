@@ -3,6 +3,8 @@ class Role < ApplicationRecord
 
   has_many :users
 
+  scope :no_super, -> { where.not( name: 'super') }
+
   def slug
     name.parameterize.underscore
   end

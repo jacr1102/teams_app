@@ -12,6 +12,9 @@
                   <li class="nav-item">
                     <router-link class="nav-link" to="/users">Users</router-link>
                   </li>
+                  <li class="nav-item">
+                    <router-link class="nav-link" to="/accounts">Accounts</router-link>
+                  </li>
                   <!--<li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Dropdown
@@ -26,8 +29,12 @@
                 </ul>
             </div>
           </nav>
-          <h1>{{title}}</h1>
-          <router-view/>
+          <div class="container py-5">
+            <h1>{{title}}</h1>
+            <div class="container pt-5">
+              <router-view/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -55,7 +62,7 @@
     },
     beforeCreate () {
       if ( !this.$store.state.logged_in) {
-        this.$router.push({ path: '/login' })
+        //this.$router.push({ path: '/login' })
       }
     }
   }

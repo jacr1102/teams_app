@@ -42,4 +42,3 @@
     }
   }
 </script>
-this.data = response["users"];

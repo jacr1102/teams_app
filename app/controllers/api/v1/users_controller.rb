@@ -4,8 +4,8 @@ class Api::V1::UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    authorize :user, :index?
-    @users = User.includes(:profile,:role).all
+    #authorize :user, :index?
+    @users = User.no_super.includes(:profile,:role).all
   end
 
   # GET /users/1
@@ -46,15 +46,20 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def users_select
+    @users = User.no_super.all.collect{|user| { id: user.id, name: user.full_name} }
+    render json: {users: @users}, status: :ok
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.includes(:profile, :role).find(params[:id])
-      authorize @user
+      #authorize @user
     end
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit :first_name, :username, :last_name, :password, :email, profile_attributes: [ :id, :user_id, :english_level, :technical_experience, :cv_link ]
+      params.require(:user).permit :first_name, :username, :last_name, :password, :email, :role_id, profile_attributes: [ :id, :user_id, :english_level, :technical_experience, :cv_link ]
     end
 end

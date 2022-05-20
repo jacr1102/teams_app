@@ -19,6 +19,8 @@ import Users from '../views/users/Index.vue'
   import ShowUser from '../views/users/Show.vue'
 
 import Accounts from '../views/accounts/Index.vue'
+  import NewAccount from '../views/accounts/New.vue'
+  import ShowAccount from '../views/accounts/Show.vue'
 import Login from '../views/Login.vue'
 import Logs from '../views/logs/Index.vue'
 
@@ -54,6 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
           component: NewUser
         },
         {
+          path: '/users/:id/edit',
+          name: 'edit_user',
+          component: NewUser
+        },
+        {
           path: '/users/:id',
           name: 'show_user',
           component: ShowUser
@@ -62,6 +69,21 @@ document.addEventListener('DOMContentLoaded', () => {
           path: '/accounts',
           name: 'accounts',
           component: Accounts
+        },
+        {
+          path: '/accounts/new',
+          name: 'new_accounts',
+          component: NewAccount
+        },
+        {
+          path: '/accounts/:id/edit',
+          name: 'edit_account',
+          component: NewAccount
+        },
+        {
+          path: '/accounts/:id',
+          name: 'show_accounts',
+          component: ShowAccount
         },
         {
           path: '/logs',
@@ -84,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         password: null
       },
       token: null,
-      logged_in: false,
+      logged_in: true,
       logged_user: null
     },
     methods: {
