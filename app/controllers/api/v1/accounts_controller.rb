@@ -6,7 +6,7 @@ class Api::V1::AccountsController < ApplicationController
   # GET /accounts.json
 
   def index
-    #authorize :account, :index?
+    authorize :account, :index?
     @accounts = Account.all
   end
 
@@ -52,7 +52,7 @@ class Api::V1::AccountsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_account
       @account = Account.find(params[:id])
-      #authorize @account
+      authorize @account
     end
 
     # Only allow a list of trusted parameters through.

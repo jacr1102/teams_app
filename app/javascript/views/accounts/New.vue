@@ -86,7 +86,7 @@
         return re.test(email);
       },
        CreateAccount: function (){
-          axios.post("/api/v1/accounts", {account: this.account} )
+          axios.post("/api/v1/accounts", {account: this.account}, { headers: { 'Authorization' : this.$store.state.access_token } } )
             .then( (response) => {
               if(response.status === 201) {
                  this.$router.push({ path : '/accounts/'+ response.data.account.id  });
@@ -94,7 +94,7 @@
             } );
         },
         EditAccount: function (){
-          axios.put("/api/v1/accounts/" + this.$route.params.id, {account: this.account} )
+          axios.put("/api/v1/accounts/" + this.$route.params.id, {account: this.account}, { headers: { 'Authorization' : this.$store.state.access_token } } )
             .then( (response) => {
               if(response.status === 200) {
                  this.$router.push({ path : '/accounts/'+ response.data.account.id  });
@@ -104,7 +104,7 @@
     },
     mounted () {
       axios
-        .get('/api/v1/users/users_select')
+        .get('/api/v1/users/users_select', { headers: { 'Authorization' : this.$store.state.access_token } } )
         .then( (response) => {
           this.managers     = response.data.users
           this.team_members = response.data.users
@@ -114,7 +114,7 @@
         this.$store.commit('setTitle', 'Edit Account')
         this.form_action = 'Update'
         axios
-          .get('/api/v1/accounts/' + this.$route.params.id)
+          .get('/api/v1/accounts/' + this.$route.params.id, { headers: { 'Authorization' : this.$store.state.access_token } })
           .then( (response) => {
             this.account = {
               id: response.data.account.id ,

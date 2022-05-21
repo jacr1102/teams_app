@@ -31,6 +31,8 @@
           </nav>
           <div class="container py-5">
             <h1>{{title}}</h1>
+            <h1>{{ this.$store.state.logged_user.names }}</h1>
+            <h1>{{ this.$store.state.logged_user.email }}</h1>
             <div class="container pt-5">
               <router-view/>
             </div>
@@ -53,7 +55,7 @@
       }
     },
     mounted(){
-      /*this.$store.commit('setTitle', 'Dashboard');*/
+      //this.$store.commit('setTitle', 'Dashboard');
     },
     data: function () {
       return {
@@ -61,8 +63,14 @@
       }
     },
     beforeCreate () {
-      if ( !this.$store.state.logged_in) {
-        //this.$router.push({ path: '/login' })
+      this.$store.dispatch('fetchAccessToken')
+
+      if ( !this.$store.state.logged_in && this.$route.name != 'login') {
+        this.$router.push({ path: '/login' })
+      }
+
+      if(this.$store.state.logged_in){
+        this.$router.push({ path: '/' })
       }
     }
   }

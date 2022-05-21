@@ -146,7 +146,7 @@
         return re.test(email);
       },
       CreateUser: function (){
-        axios.post("/api/v1/users", {user: this.user} )
+        axios.post("/api/v1/users", {user: this.user}, { headers: { 'Authorization' : this.$store.state.access_token } } )
           .then( (response) => {
             if(response.status === 201) {
                this.$router.push({ path : '/users/'+ response.data.user.id  });
@@ -156,9 +156,9 @@
       EditUser: function (){
         let user = this.user
         delete user['password']
-        delete user['email']
+        //delete user['email']
 
-        axios.put("/api/v1/users/" + this.$route.params.id, {user: user} )
+        axios.put("/api/v1/users/" + this.$route.params.id, {user: user}, { headers: { 'Authorization' : this.$store.state.access_token } } )
           .then( (response) => {
             if(response.status === 200) {
                this.$router.push({ path : '/users/'+ response.data.user.id  });
@@ -168,14 +168,14 @@
     },
     mounted () {
       axios
-        .get('/api/v1/roles/roles_select')
+        .get('/api/v1/roles/roles_select', { headers: { 'Authorization' : this.$store.state.access_token } })
         .then( (response) => { this.roles = response.data.roles } )
 
       if( this.$route.params.id ){
         this.$store.commit('setTitle', 'Edit User')
         this.form_action = 'Update'
         axios
-          .get('/api/v1/users/' + this.$route.params.id)
+          .get('/api/v1/users/' + this.$route.params.id, { headers: { 'Authorization' : this.$store.state.access_token } })
           .then( (response) => { this.user = response.data.user } )
       }else{
         this.$store.commit('setTitle', 'New User')

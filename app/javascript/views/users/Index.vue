@@ -50,11 +50,11 @@
       deleteUser(user_id){
         if( confirm("Are you sure to remove this user?") ){
           axios
-            .delete('/api/v1/users/' + user_id)
+            .delete('/api/v1/users/' + user_id, { headers: { 'Authorization' : this.$store.state.access_token } })
             .then( (response) => {
               if(response.status === 200) {
                 axios
-                  .get('/api/v1/users')
+                  .get('/api/v1/users',{ headers: { 'Authorization' : this.$store.state.access_token } })
                   .then( (response) => { this.data = response.data.users } )
               }
 
@@ -65,8 +65,20 @@
     mounted () {
       this.$store.commit('setTitle', 'List of Users')
       axios
-        .get('/api/v1/users')
-        .then( (response) => { this.data = response.data.users } )
+        .get('/api/v1/users', { headers: { 'Authorization' : this.$store.state.access_token } } )
+        .then( (response) => {
+              if( response.status == 200 ){
+                this.data = response.data.users
+              }
+            }
+
+          ).catch(error => {
+            console.log( error.response.status )
+            if( error.response.status == 401 ){
+              this.$store.dispatch('resetAccessToken')
+              this.$router.push({ path: '/login' })
+            }
+          })
 
     }
   }

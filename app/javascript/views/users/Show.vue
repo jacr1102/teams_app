@@ -42,7 +42,7 @@
     mounted () {
       this.$store.commit('setTitle', 'User')
       axios
-        .get('/api/v1/users/'+this.$route.params.id)
+        .get('/api/v1/users/'+this.$route.params.id, { headers: { 'Authorization' : this.$store.state.access_token } })
         .then( (response) => { this.data = response.data.user } )
 
 

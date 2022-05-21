@@ -7,6 +7,8 @@
 
 import Vue from 'vue/dist/vue.js'
 import Vuex from 'vuex'
+
+import Vuelidate from 'vuelidate'
 //import Bootstrap from 'bootstrap'
 //import BootstrapVue from 'bootstrap-vue'
 import ElementUI from 'element-ui'
@@ -35,6 +37,12 @@ Vue.use(ElementUI);
 // Vue.use(Bootstrap);
 Vue.use(Router)
 Vue.use(Vuex)
+
+
+function oles(value){
+  console.log(value);
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const router = new Router({
@@ -98,6 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
       ]
   })
 
+  const logged_user = {
+        id: null,
+        name: null,
+        email: null
+      }
+
   const store = new Vuex.Store({
     state:{
       title: '',
@@ -105,27 +119,63 @@ document.addEventListener('DOMContentLoaded', () => {
         email: null,
         password: null
       },
-      token: null,
-      logged_in: true,
-      logged_user: null
+      access_token: null,
+      api_data: null,
+      logged_in: false,
+      logging_in: false,
+      logged_user: logged_user,
+      login_error: null
     },
     methods: {
       getToken(){
-        this.token
+        this.access_token
       }
     },
     mutations: {
+
       setTitle(state, title){
         state.title = title
       },
-      setToken(state, token){
-        state.token = token
-      }
+      loginStart: state => state.logging_in = true,
+      updateAccessToken: (state, access_token) => {
+        state.access_token = access_token;
+      },
+      updateLoggedUser(state, logged_user){
+        if(logged_user){
+          state.logged_user = logged_user
+          state.logged_in = true
+        }
+      },
+      LogIn(state, value){
+        state.logged_in = true
+      },
+      loginStop: (state, errorMessage) => {
+        state.logging_in = false;
+        state.login_error = errorMessage;
+      },
+
     },
-    created(){
+    actions: {
+      fetchAccessToken({ commit }) {
+        console.log(localStorage.getItem('access_token'))
+        console.log(localStorage.getItem('logged_user'))
+
+        commit('updateAccessToken', localStorage.getItem('access_token'));
+        commit('updateLoggedUser', localStorage.getItem('logged_user'));
+      },
+      resetAccessToken({ commit }){
+        commit('updateAccessToken' )
+        localStorage.removeItem('access_token')
+        this.state.logged_in = false
+
+
+        commit('updateLoggedUser', logged_user )
+        localStorage.removeItem('logged_user')
+      },
+    },
+    created() {
 
     }
-
   })
 
   const app = new Vue({
@@ -137,50 +187,4 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(app.$el)
 
   // console.log(app)
-})
-
-
-
-
-
-
-
-
-export default new Vuex.Store({
-  state: {
-    accessToken: null,
-    loggingIn: false,
-    loginError: null
-  },
-  mutations: {
-    loginStart: state => state.loggingIn = true,
-    loginStop: (state, errorMessage) => {
-      state.loggingIn = false;
-      state.loginError = errorMessage;
-    },
-    updateAccessToken: (state, accessToken) => {
-      state.accessToken = accessToken;
-    }
-  },
-  actions: {
-    doLogin({ commit }, loginData) {
-      commit('loginStart');
-
-      axios.post('https://reqres.in/api/login', {
-        ...loginData
-      })
-      .then(response => {
-        localStorage.setItem('accessToken', response.data.token);
-        commit('loginStop', null);
-        commit('updateAccessToken', response.data.token);
-      })
-      .catch(error => {
-        commit('loginStop', error.response.data.error);
-        commit('updateAccessToken', null);
-      })
-    },
-    fetchAccessToken({ commit }) {
-      commit('updateAccessToken', localStorage.getItem('accessToken'));
-    }
-  }
 })

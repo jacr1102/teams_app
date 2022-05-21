@@ -64,15 +64,33 @@
         e.preventDefault()
       },
       loginUser: function (){
-        axios.post("/login", {user: this.user} )
-          .then( (response) => {
+        this.$store.commit('loginStart');
+
+        axios.post( "/login", {user: this.user} )
+          .then(response => {
+            console.log( response )
             if(response.status === 200) {
-              this.$store.commit( 'setToken', response.headers.authorization )
+
+              localStorage.setItem('access_token', response.headers.authorization )
+              localStorage.setItem('logged_user', {
+                  id: response.data.id,
+                  name: response.data.first_name + " " + response.data.last_name,
+                  email: response.data.email
+                } )
+
+              this.$store.commit('loginStop', null)
+              this.$store.commit('updateAccessToken', response.headers.authorization )
+              this.$store.commit('updateLoggedUser', response.data )
+
+              this.$router.push({ path : '/'  });
+            }else{
+              this.errors << "Error validating login data"
             }
-          } )
+          })
           .catch(error => {
-            this.errors = error.message;
-            console.error("There was an error!", error);
+            console.log( error )
+            this.$store.commit('loginStop', error.response.data.error)
+            this.$store.commit('updateAccessToken', null)
           })
       }
     },

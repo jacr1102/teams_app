@@ -48,11 +48,11 @@
       deleteAccount(account_id){
         if( confirm("Are you sure to remove this account?") ){
           axios
-            .delete('/api/v1/accounts/' + account_id)
+            .delete('/api/v1/accounts/' + account_id, { headers: { 'Authorization' : this.$store.state.access_token } })
             .then( (response) => {
               if(response.status === 200) {
                 axios
-                  .get('/api/v1/accounts')
+                  .get('/api/v1/accounts', { headers: { 'Authorization' : this.$store.state.access_token } })
                   .then( (response) => { this.data = response.data.accounts } )
               }
 
@@ -63,7 +63,7 @@
     mounted () {
       this.$store.commit('setTitle', 'List of Accounts')
       axios
-        .get('/api/v1/accounts')
+        .get('/api/v1/accounts', { headers: { 'Authorization' : this.$store.state.access_token } })
         .then( (response) => { this.data = response.data.accounts } )
 
     }
