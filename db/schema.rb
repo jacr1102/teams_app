@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_16_182448) do
+ActiveRecord::Schema.define(version: 2022_05_22_030749) do
 
   create_table "accounts", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
@@ -27,17 +27,6 @@ ActiveRecord::Schema.define(version: 2022_05_16_182448) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["jti"], name: "index_jwt_blacklists_on_jti"
-  end
-
-  create_table "logs", charset: "utf8mb4", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "account_from_id"
-    t.bigint "account_to_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["account_from_id"], name: "index_logs_on_account_from_id"
-    t.index ["account_to_id"], name: "index_logs_on_account_to_id"
-    t.index ["user_id"], name: "index_logs_on_user_id"
   end
 
   create_table "profiles", charset: "utf8mb4", force: :cascade do |t|
@@ -66,6 +55,16 @@ ActiveRecord::Schema.define(version: 2022_05_16_182448) do
     t.index ["user_id"], name: "index_team_members_on_user_id"
   end
 
+  create_table "user_logs", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "account_id"
+    t.string "action", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_user_logs_on_account_id"
+    t.index ["user_id"], name: "index_user_logs_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name"
@@ -86,11 +85,10 @@ ActiveRecord::Schema.define(version: 2022_05_16_182448) do
   end
 
   add_foreign_key "accounts", "users"
-  add_foreign_key "logs", "accounts", column: "account_from_id"
-  add_foreign_key "logs", "accounts", column: "account_to_id"
-  add_foreign_key "logs", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "team_members", "accounts"
   add_foreign_key "team_members", "users"
+  add_foreign_key "user_logs", "accounts"
+  add_foreign_key "user_logs", "users"
   add_foreign_key "users", "roles"
 end

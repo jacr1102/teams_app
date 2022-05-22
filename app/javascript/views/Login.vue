@@ -58,29 +58,43 @@
         }
 
         if (!this.errors.length) {
-          this.loginUser()
+          this.login()
         }
 
         e.preventDefault()
       },
-      loginUser: function (){
-        this.$store.commit('loginStart');
+      async login (){
+        try {
 
+          const response = await this.$store.state.auth.login( this.user )
+
+          if( response.headers.authorization ){
+
+            localStorage.setItem('access_token', response.headers.authorization )
+            localStorage.setItem('logged_user', response.data.username )
+
+            this.$store.commit('updateAccessToken', response.headers.authorization )
+            this.$store.commit('updateLoggedUser', response.data.username )
+
+            this.$router.push("/")
+          }else{
+            console.log("Login Error")
+          }
+          console.log(response)
+        } catch (error) {
+          console.log(error);
+        }
+
+        /*
         axios.post( "/login", {user: this.user} )
           .then(response => {
             console.log( response )
             if(response.status === 200) {
 
-              localStorage.setItem('access_token', response.headers.authorization )
-              localStorage.setItem('logged_user', {
-                  id: response.data.id,
-                  name: response.data.first_name + " " + response.data.last_name,
-                  email: response.data.email
-                } )
+
 
               this.$store.commit('loginStop', null)
-              this.$store.commit('updateAccessToken', response.headers.authorization )
-              this.$store.commit('updateLoggedUser', response.data )
+
 
               this.$router.push({ path : '/'  });
             }else{
@@ -91,16 +105,11 @@
             console.log( error )
             this.$store.commit('loginStop', error.response.data.error)
             this.$store.commit('updateAccessToken', null)
-          })
+          }) */
       }
     },
     mounted () {
       this.$store.commit('setTitle', 'Login')
-      //this.$store.commit('checkAuthorization')
-      /*axios
-        .get('http://localhost/api/v1/users/id')
-        .then( (response) => { this.data = response.data.accounts } )*/
-
     }
   }
 </script>

@@ -39,32 +39,34 @@
       }
     },
     methods: {
+      async getAccounts(){
+        const response = await this.$store.state.auth.get( '/api/v1/accounts' )
+
+        if(response.status === 200) {
+          this.data = response.data.accounts
+        }
+      },
       getUrl(account_id){
         return "/#/accounts/" + account_id
       },
       getEditUrl(account_id){
         return "/#/accounts/" + account_id + "/edit"
       },
-      deleteAccount(account_id){
+      async deleteAccount(account_id){
         if( confirm("Are you sure to remove this account?") ){
-          axios
-            .delete('/api/v1/accounts/' + account_id, { headers: { 'Authorization' : this.$store.state.access_token } })
-            .then( (response) => {
-              if(response.status === 200) {
-                axios
-                  .get('/api/v1/accounts', { headers: { 'Authorization' : this.$store.state.access_token } })
-                  .then( (response) => { this.data = response.data.accounts } )
-              }
 
-             })
+          const response = await this.$store.state.auth.delete( '/api/v1/accounts/' + account_id )
+
+          if(response.status === 200) {
+            this.getAccounts()
+          }
         }
       }
     },
     mounted () {
       this.$store.commit('setTitle', 'List of Accounts')
-      axios
-        .get('/api/v1/accounts', { headers: { 'Authorization' : this.$store.state.access_token } })
-        .then( (response) => { this.data = response.data.accounts } )
+
+      this.getAccounts()
 
     }
   }

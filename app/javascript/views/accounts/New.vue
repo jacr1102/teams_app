@@ -28,10 +28,22 @@
           </div>
           <div class="col-md-12 text-start">
             <label for="account_team_ids" class="form-label fw-bold">Team Members</label>
-            <select v-model="account.team_ids" multiple="multiple"  class="form-select" name="account[team_ids]" id="account_team_ids">
+            <!--<multiselect
+              v-model="account.team_ids"
+              :options="team_members"
+              :multiple="true"
+              :close-on-select="true"
+              placeholder="Select Team Members"
+              label="name"
+              track-by="name"
+              :searchable="true"
+               >
+            </multiselect>-->
+            <select v-model="account.team_ids" multiple="multiple"  class="form-select select2_multiple" name="account[team_ids]" id="account_team_ids">
               <option v-for="user in team_members" :value="user.id" >{{user.name}}</option>
             </select>
           </div>
+
           <div class="col-12 ">
             <button type="submit" class="btn btn-primary">{{form_action}} Account</button>
           </div>
@@ -41,8 +53,16 @@
 </template>
 
 <script>
+
+  import Multiselect from 'vue-multiselect'
+
+  //Vue.use(Multiselect);
+
   export default {
     name: 'NewUser',
+    components:{
+      Multiselect
+    },
     data: function(){
       return {
         errors: [],
@@ -73,9 +93,9 @@
 
         if (!this.errors.length) {
           if(this.account.id){
-            this.EditAccount()
+            this.editAccount()
           }else{
-            this.CreateAccount()
+            this.createAccount()
           }
         }
 
@@ -85,7 +105,20 @@
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
       },
-       CreateAccount: function (){
+      async getAccount(){
+        const response = await this.$store.state.auth.get( '/api/v1/accounts/' + this.$route.params.id )
+
+        if(response.status === 200) {
+          this.account = {
+              id: response.data.account.id ,
+              name: response.data.account.name,
+              client_name: response.data.account.client_name,
+              user_id: response.data.account.user_id,
+              team_ids: response.data.account.team_ids
+            }
+        }
+      },
+       async createAccount(){
           axios.post("/api/v1/accounts", {account: this.account}, { headers: { 'Authorization' : this.$store.state.access_token } } )
             .then( (response) => {
               if(response.status === 201) {
@@ -93,7 +126,7 @@
               }
             } );
         },
-        EditAccount: function (){
+        async editAccount(){
           axios.put("/api/v1/accounts/" + this.$route.params.id, {account: this.account}, { headers: { 'Authorization' : this.$store.state.access_token } } )
             .then( (response) => {
               if(response.status === 200) {
@@ -113,18 +146,7 @@
       if( this.$route.params.id ){
         this.$store.commit('setTitle', 'Edit Account')
         this.form_action = 'Update'
-        axios
-          .get('/api/v1/accounts/' + this.$route.params.id, { headers: { 'Authorization' : this.$store.state.access_token } })
-          .then( (response) => {
-            this.account = {
-              id: response.data.account.id ,
-              name: response.data.account.name,
-              client_name: response.data.account.client_name,
-              user_id: response.data.account.user_id,
-              team_ids: response.data.account.team_ids
-            }
-
-          } )
+        this.getAccount()
       }else{
         this.$store.commit('setTitle', 'New Account')
       }
@@ -132,3 +154,5 @@
     }
   }
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

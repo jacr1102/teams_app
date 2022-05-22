@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
 
   has_many :accounts
-  has_many :logs, dependent: :destroy
+  has_many :user_logs, dependent: :destroy
   has_many :team_members, dependent: :destroy
   has_many :projects, source: :accounts, through: :team_members
 
@@ -37,6 +37,16 @@ class User < ApplicationRecord
   Role.slugs.each do |slug|
     define_method "is_#{slug}?" do
       role.slug == slug
+    end
+  end
+
+  Role.all.each do |role|
+    slug = role.name.parameterize.underscore
+    define_singleton_method "all_#{slug}" do
+      role_id = role.id
+
+      self.joins(:role)
+      .where(role_id: role_id).all
     end
   end
 

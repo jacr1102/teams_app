@@ -133,9 +133,9 @@
 
         if (!this.errors.length) {
           if(this.user.id){
-            this.EditUser()
+            this.editUser()
           }else{
-            this.CreateUser()
+            this.createUser()
           }
         }
 
@@ -145,45 +145,45 @@
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
       },
-      CreateUser: function (){
-        axios.post("/api/v1/users", {user: this.user}, { headers: { 'Authorization' : this.$store.state.access_token } } )
-          .then( (response) => {
-            if(response.status === 201) {
-               this.$router.push({ path : '/users/'+ response.data.user.id  });
-            }
-          } );
+      async getUser(){
+        const response = await this.$store.state.auth.get( '/api/v1/users/'+this.$route.params.id )
+        if( response.status == 200 ){
+          this.user = response.data.user
+        }
       },
-      EditUser: function (){
+      async createUser(){
+        const response = await this.$store.state.auth.post( '/api/v1/users', {user: this.user} )
+
+        if(response.status === 201) {
+           this.$router.push({ path : '/users/'+ response.data.user.id  });
+        }
+
+      },
+      async editUser(){
         let user = this.user
         delete user['password']
         //delete user['email']
 
-        axios.put("/api/v1/users/" + this.$route.params.id, {user: user}, { headers: { 'Authorization' : this.$store.state.access_token } } )
-          .then( (response) => {
-            if(response.status === 200) {
-               this.$router.push({ path : '/users/'+ response.data.user.id  });
-            }
-          } );
+        const response = await this.$store.state.auth.put( '/api/v1/users/' + this.$route.params.id, {user: user} )
+
+        if(response.status === 200) {
+           this.$router.push({ path : '/users/'+ response.data.user.id  });
+        }
       }
     },
     mounted () {
-      axios
-        .get('/api/v1/roles/roles_select', { headers: { 'Authorization' : this.$store.state.access_token } })
+      this.$store.state.auth.get( '/api/v1/roles/roles_select' )
         .then( (response) => { this.roles = response.data.roles } )
 
       if( this.$route.params.id ){
         this.$store.commit('setTitle', 'Edit User')
         this.form_action = 'Update'
-        axios
-          .get('/api/v1/users/' + this.$route.params.id, { headers: { 'Authorization' : this.$store.state.access_token } })
-          .then( (response) => { this.user = response.data.user } )
+
+        this.getUser()
+
       }else{
         this.$store.commit('setTitle', 'New User')
       }
-
-      /*axios
-        .get('http://localhost/api/v1/users/id')
-        .then( (response) => { this.data = response.data.accounts } )*/
 
     }
   }

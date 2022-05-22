@@ -61,3 +61,24 @@ ActiveRecord::Base.transaction do
   end
 
 end
+
+accounts = Account.includes(:team).all
+
+accounts.each do |account|
+  account.team.each do |user|
+    start_date = rand(5..10)
+    end_date = rand(1..4)
+
+    UserLog.create( user_id: user.id, account_id: account.id, action: "start" ).update created_at: (Time.now - start_date.years), updated_at: (Time.now - start_date.years)
+    UserLog.create( user_id: user.id, account_id: account.id, action: "end" ).update created_at: (Time.now - end_date.years), updated_at: (Time.now - end_date.years)
+
+    UserLog.create( user_id: user.id, account_id: account.id, action: "start" )
+  end
+end
+
+#logs
+# action start_date
+# action end_date
+
+#team where teams in single selected
+#name by like in first and last names

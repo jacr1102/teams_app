@@ -39,14 +39,17 @@
         data: [],
       }
     },
+    methods:{
+      async getUser(){
+        const response = await this.$store.state.auth.get( '/api/v1/users/'+this.$route.params.id )
+        if( response.status == 200 ){
+          this.data = response.data.user
+        }
+      },
+    },
     mounted () {
       this.$store.commit('setTitle', 'User')
-      axios
-        .get('/api/v1/users/'+this.$route.params.id, { headers: { 'Authorization' : this.$store.state.access_token } })
-        .then( (response) => { this.data = response.data.user } )
-
-
-
+      this.getUser()
     }
   }
 </script>

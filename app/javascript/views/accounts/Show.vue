@@ -54,11 +54,18 @@
         data: [],
       }
     },
+    methods: {
+      async getAccount(){
+        const response = await this.$store.state.auth.get( '/api/v1/accounts/'+this.$route.params.id )
+
+        if(response.status === 200) {
+          this.data = response.data.account
+        }
+      },
+    },
     mounted () {
       this.$store.commit('setTitle', 'Account')
-      axios
-        .get('/api/v1/accounts/'+this.$route.params.id, { headers: { 'Authorization' : this.$store.state.access_token } })
-        .then( (response) => { console.log(response.data); this.data = response.data.account } )
+      this.getAccount()
 
 
 

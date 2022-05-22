@@ -5,6 +5,7 @@ gem 'rails', '6.1.4'
 gem 'bootstrap', '~> 5.1', '>= 5.1.3'
 gem 'jquery-rails' # jQuery
 gem 'jquery-ui-rails' # jQuery UI
+gem 'select2-rails' # Improved SELECT inputs
 
 gem 'puma', '~> 4'
 gem 'sass-rails', '~> 5.0'

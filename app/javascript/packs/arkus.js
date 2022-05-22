@@ -11,7 +11,7 @@ import Vuex from 'vuex'
 import Vuelidate from 'vuelidate'
 //import Bootstrap from 'bootstrap'
 //import BootstrapVue from 'bootstrap-vue'
-import ElementUI from 'element-ui'
+//import ElementUI from 'element-ui'
 
 import Router from 'vue-router'
 import Home from '../views/Home.vue'
@@ -26,6 +26,7 @@ import Accounts from '../views/accounts/Index.vue'
 import Login from '../views/Login.vue'
 import Logs from '../views/logs/Index.vue'
 
+import auth from './auth'
 import App from '../App.vue'
 
 window.axios = require('axios');
@@ -33,7 +34,7 @@ window.axios = require('axios');
 // Creamos una propiedad global para axios
 Vue.prototype.$axios = axios
 
-Vue.use(ElementUI);
+//Vue.use(ElementUI);
 // Vue.use(Bootstrap);
 Vue.use(Router)
 Vue.use(Vuex)
@@ -109,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const logged_user = {
         id: null,
         name: null,
+        username: null,
         email: null
       }
 
@@ -120,16 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
         password: null
       },
       access_token: null,
-      api_data: null,
+      auth: auth,
       logged_in: false,
       logging_in: false,
+      username: null,
       logged_user: logged_user,
       login_error: null
     },
     methods: {
-      getToken(){
-        this.access_token
-      }
     },
     mutations: {
 
@@ -139,11 +139,14 @@ document.addEventListener('DOMContentLoaded', () => {
       loginStart: state => state.logging_in = true,
       updateAccessToken: (state, access_token) => {
         state.access_token = access_token;
+        state.auth.setHeaders(access_token)
       },
       updateLoggedUser(state, logged_user){
         if(logged_user){
-          state.logged_user = logged_user
+          state.username = logged_user
           state.logged_in = true
+        }else{
+          state.logged_in = false
         }
       },
       LogIn(state, value){
@@ -157,21 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     actions: {
       fetchAccessToken({ commit }) {
-        console.log(localStorage.getItem('access_token'))
-        console.log(localStorage.getItem('logged_user'))
-
         commit('updateAccessToken', localStorage.getItem('access_token'));
         commit('updateLoggedUser', localStorage.getItem('logged_user'));
-      },
-      resetAccessToken({ commit }){
-        commit('updateAccessToken' )
-        localStorage.removeItem('access_token')
-        this.state.logged_in = false
-
-
-        commit('updateLoggedUser', logged_user )
-        localStorage.removeItem('logged_user')
-      },
+      }
     },
     created() {
 

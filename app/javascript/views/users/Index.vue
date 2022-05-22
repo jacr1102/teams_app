@@ -41,45 +41,30 @@
       }
     },
     methods: {
+      async getUsers(){
+        const response = await this.$store.state.auth.get( '/api/v1/users' )
+        if( response.status == 200 ){
+          this.data = response.data.users
+        }
+      },
       getUrl(user_id){
         return "/#/users/" + user_id
       },
       getEditUrl(user_id){
         return "/#/users/" + user_id + "/edit"
       },
-      deleteUser(user_id){
+      async deleteUser(user_id){
         if( confirm("Are you sure to remove this user?") ){
-          axios
-            .delete('/api/v1/users/' + user_id, { headers: { 'Authorization' : this.$store.state.access_token } })
-            .then( (response) => {
-              if(response.status === 200) {
-                axios
-                  .get('/api/v1/users',{ headers: { 'Authorization' : this.$store.state.access_token } })
-                  .then( (response) => { this.data = response.data.users } )
-              }
-
-             })
+          const response = await this.$store.state.auth.delete( '/api/v1/users/' + user_id )
+          if( response.status == 200 ){
+            this.getUsers()
+          }
         }
       }
     },
     mounted () {
       this.$store.commit('setTitle', 'List of Users')
-      axios
-        .get('/api/v1/users', { headers: { 'Authorization' : this.$store.state.access_token } } )
-        .then( (response) => {
-              if( response.status == 200 ){
-                this.data = response.data.users
-              }
-            }
-
-          ).catch(error => {
-            console.log( error.response.status )
-            if( error.response.status == 401 ){
-              this.$store.dispatch('resetAccessToken')
-              this.$router.push({ path: '/login' })
-            }
-          })
-
+      this.getUsers()
     }
   }
 </script>
