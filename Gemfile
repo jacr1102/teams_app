@@ -23,6 +23,7 @@ gem 'sentient_user'
 gem 'devise'
 gem 'devise-encryptable' # Password login
 gem 'figaro'
+gem 'ransack'
 
 gem 'mysql2'
 gem 'nokogiri'
