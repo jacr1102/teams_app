@@ -31,21 +31,6 @@ import App from '../App.vue'
 
 window.axios = require('axios');
 
-// Creamos una propiedad global para axios
-Vue.prototype.$axios = axios
-
-//Vue.use(ElementUI);
-// Vue.use(Bootstrap);
-Vue.use(Router)
-Vue.use(Vuex)
-
-
-function oles(value){
-  console.log(value);
-}
-
-
-document.addEventListener('DOMContentLoaded', () => {
   const router = new Router({
     base: process.env.BASE_URL,
     routes:[
@@ -106,6 +91,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       ]
   })
+
+axios.interceptors.response.use( (response) => {
+  return response
+}, async (error) => {
+  console.log(error.response)
+  if (error.response.status === 401) {
+    router.push("/login")
+  }
+
+  return Promise.reject(error)
+})
+
+
+// Creamos una propiedad global para axios
+Vue.prototype.$axios = axios
+
+//Vue.use(ElementUI);
+// Vue.use(Bootstrap);
+Vue.use(Router)
+Vue.use(Vuex)
+
+
+function oles(value){
+  console.log(value);
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+
+  /*router.beforeEach((to, from, next) => {
+    const publicPages = ['/login'];
+    const authRequired = !publicPages.includes(to.path);
+    const loggedIn = localStorage.getItem('user');
+    // trying to access a restricted page + not logged in
+    // redirect to login page
+    if (authRequired && !loggedIn) {
+      next('/login');
+    } else {
+      next();
+    }
+  });*/
 
   const logged_user = {
         id: null,
