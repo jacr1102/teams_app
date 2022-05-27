@@ -16,7 +16,7 @@
                     <router-link class="nav-link" to="/accounts">Accounts</router-link>
                   </li>
                   <li class="nav-item">
-                    <router-link class="nav-link" to="/accounts">User Logs</router-link>
+                    <router-link class="nav-link" to="/user_logs">User Logs</router-link>
                   </li>
                   <li class="nav-item">
                     <a href="#" class="nav-link" @click="logout">Logout</a>
@@ -85,8 +85,8 @@
     },
     beforeCreate () {
       this.$store.dispatch('fetchAccessToken')
-      if( !this.$store.state.logged_in && this.$route.path != '/login'){
-        this.$router.push('/login')
+      if( this.$store.state.logged_in && this.$route.path == '/login'){
+        this.$router.push('/')
       }
     }
   }

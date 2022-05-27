@@ -20,11 +20,12 @@ import Users from '../views/users/Index.vue'
   import NewUser from '../views/users/New.vue'
   import ShowUser from '../views/users/Show.vue'
 
+import UserLogs from '../views/user_logs/Index.vue'
+
 import Accounts from '../views/accounts/Index.vue'
   import NewAccount from '../views/accounts/New.vue'
   import ShowAccount from '../views/accounts/Show.vue'
 import Login from '../views/Login.vue'
-import Logs from '../views/logs/Index.vue'
 
 import auth from './auth'
 import App from '../App.vue'
@@ -60,6 +61,11 @@ window.axios = require('axios');
           component: ShowUser
         },
         {
+          path: '/user_logs',
+          name: 'user_logs',
+          component: UserLogs
+        },
+        {
           path: '/accounts',
           name: 'accounts',
           component: Accounts
@@ -78,11 +84,6 @@ window.axios = require('axios');
           path: '/accounts/:id',
           name: 'show_accounts',
           component: ShowAccount
-        },
-        {
-          path: '/logs',
-          name: 'logs',
-          component: Logs
         },
         {
           path: '/login',
@@ -133,6 +134,15 @@ document.addEventListener('DOMContentLoaded', () => {
       next();
     }
   });*/
+
+  /*router.beforeEach((to, from, next) => {
+    if (logged_in) {
+      next('/login')
+    }
+    else {
+      next()
+    }
+  })*/
 
   const logged_user = {
         id: null,

@@ -47,6 +47,12 @@ class Api::V1::AccountsController < ApplicationController
     end
   end
 
+  def accounts_select
+    authorize :account, :index?
+    @accounts = Account.all.collect{|account| { id: account.id, name: account.client_name} }
+    render json: {accounts: @accounts}, status: :ok
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.

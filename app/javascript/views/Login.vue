@@ -108,6 +108,17 @@
           }) */
       }
     },
+    beforeCreate(){
+      if( this.$store.state.logged_in){
+        /*this.$router.push('/')*/
+      }else{
+        localStorage.removeItem('logged_user')
+        localStorage.removeItem('access_token')
+
+        this.$store.commit('updateAccessToken', null )
+        this.$store.commit('updateLoggedUser', null )
+      }
+    },
     mounted () {
       this.$store.commit('setTitle', 'Login')
     }

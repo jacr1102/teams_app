@@ -19,7 +19,7 @@
           <div class="row">
             <div class="container my-5">
               <h2>Team</h2>
-              <div class="table-responsive">
+              <div class="">
                 <table class="table table-bordered">
                   <thead>
                     <tr>

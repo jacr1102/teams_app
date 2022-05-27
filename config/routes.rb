@@ -4,13 +4,15 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => '/api-docs'
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
-      resources :logs
       resources :teams
-      resources :accounts
+      resources :accounts do
+        get 'accounts_select', on: :collection
+      end
       resources :users do
         get 'users_select', on: :collection
       end
 
+      match 'user_logs', to: 'user_logs#index', via: [:get, :post], as: :search_logs
       get 'roles/roles_select'
     end
   end

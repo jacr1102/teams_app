@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="table-responsive">
+    <div class="">
       <table class="table table-bordered" :items="data" :fields="fields">
         <thead class="thead-dark">
           <tr>
